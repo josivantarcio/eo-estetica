@@ -1,0 +1,136 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("USER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  logs      Log[]
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  details   String?
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}
+
+model Cliente {
+  id           String        @id @default(cuid())
+  nome         String
+  telefone     String        @unique
+  email        String?
+  dataNasc     DateTime?
+  ativo        Boolean       @default(true)
+  observacoes  String?
+  criadoViaIA  Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  agendamentos Agendamento[]
+}
+
+model Servico {
+  id                String              @id @default(cuid())
+  nome              String
+  descricao         String?
+  preco             Float
+  duracaoMinutos    Int
+  categoria         String?
+  ativo             Boolean             @default(true)
+  tipoComissao      String              @default("PERCENTUAL")
+  valorComissao     Float
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  agendamentoItens  AgendamentoItem[]
+}
+
+model Profissional {
+  id                String              @id @default(cuid())
+  nome              String
+  telefone          String
+  email             String?
+  cpfCnpj           String?
+  chavePix          String?
+  especialidades    String?
+  ativo             Boolean             @default(true)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  agendamentoItens  AgendamentoItem[]
+  pagamentos        Pagamento[]
+}
+
+model Agendamento {
+  id            String              @id @default(cuid())
+  clienteId     String
+  cliente       Cliente             @relation(fields: [clienteId], references: [id])
+  dataHora      DateTime
+  status        String              @default("AGENDADO")
+  formaPagamento String?
+  observacoes   String?
+  valorTotal    Float               @default(0)
+  duracaoTotal  Int                 @default(0)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  itens         AgendamentoItem[]
+}
+
+model AgendamentoItem {
+  id             String       @id @default(cuid())
+  agendamentoId  String
+  agendamento    Agendamento  @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
+  servicoId      String
+  servico        Servico      @relation(fields: [servicoId], references: [id])
+  profissionalId String
+  profissional   Profissional @relation(fields: [profissionalId], references: [id])
+  preco          Float
+  duracao        Int
+  createdAt      DateTime     @default(now())
+}
+
+model Pagamento {
+  id             String       @id @default(cuid())
+  profissionalId String
+  profissional   Profissional @relation(fields: [profissionalId], references: [id])
+  periodo        String
+  valorTotal     Float
+  status         String          @default("PENDENTE")
+  detalhes       String?      // JSON com agendamentos incluídos
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Configuracao {
+  id              String   @id @default(cuid())
+  nomeEmpresa     String
+  endereco        String?
+  telefone        String?
+  email           String?
+  instagram       String?
+  logo            String?
+  corPrimaria     String   @default("#3b82f6")
+  corSecundaria   String   @default("#64748b")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Enums como strings para SQLite
+// Role: "ADMIN" | "USER"
+// StatusAgendamento: "AGENDADO" | "CONFIRMADO" | "EM_ANDAMENTO" | "CONCLUIDO" | "CANCELADO"
+// TipoComissao: "PERCENTUAL" | "VALOR_FIXO"
+// StatusPagamento: "PENDENTE" | "PAGO"

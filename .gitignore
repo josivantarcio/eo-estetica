@@ -1,0 +1,25 @@
+# Dependências
+/node_modules
+/.pnp
+.pnp.js
+
+# Build
+/.next/
+/out/
+/build
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cache
+/.cache
+/coverage
+/.eslintcache
+/.vercel
+
+# Outros
+.DS_Store
