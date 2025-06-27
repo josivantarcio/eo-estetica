@@ -10,7 +10,6 @@ export function LogoutTimer() {
 
   useEffect(() => {
     let interval: NodeJS.Timeout
-    let timeout: NodeJS.Timeout
 
     const resetTimer = () => {
       setTimeLeft(30 * 60)
@@ -42,7 +41,6 @@ export function LogoutTimer() {
 
     return () => {
       clearInterval(interval)
-      clearTimeout(timeout)
       events.forEach(event => {
         document.removeEventListener(event, handleActivity, true)
       })

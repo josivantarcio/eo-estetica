@@ -6,15 +6,15 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String?
-  role      String   @default("USER")
+  role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   logs      Log[]
@@ -53,7 +53,7 @@ model Servico {
   duracaoMinutos    Int
   categoria         String?
   ativo             Boolean             @default(true)
-  tipoComissao      String              @default("PERCENTUAL")
+  tipoComissao      TipoComissao        @default(PERCENTUAL)
   valorComissao     Float
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
@@ -80,7 +80,7 @@ model Agendamento {
   clienteId     String
   cliente       Cliente             @relation(fields: [clienteId], references: [id])
   dataHora      DateTime
-  status        String              @default("AGENDADO")
+  status        StatusAgendamento   @default(AGENDADO)
   formaPagamento String?
   observacoes   String?
   valorTotal    Float               @default(0)
@@ -109,7 +109,7 @@ model Pagamento {
   profissional   Profissional @relation(fields: [profissionalId], references: [id])
   periodo        String
   valorTotal     Float
-  status         String          @default("PENDENTE")
+  status         StatusPagamento @default(PENDENTE)
   detalhes       String?      // JSON com agendamentos incluídos
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -129,8 +129,26 @@ model Configuracao {
   updatedAt       DateTime @updatedAt
 }
 
-// Enums como strings para SQLite
-// Role: "ADMIN" | "USER"
-// StatusAgendamento: "AGENDADO" | "CONFIRMADO" | "EM_ANDAMENTO" | "CONCLUIDO" | "CANCELADO"
-// TipoComissao: "PERCENTUAL" | "VALOR_FIXO"
-// StatusPagamento: "PENDENTE" | "PAGO"
+// Enums para PostgreSQL
+enum Role {
+  ADMIN
+  USER
+}
+
+enum StatusAgendamento {
+  AGENDADO
+  CONFIRMADO
+  EM_ANDAMENTO
+  CONCLUIDO
+  CANCELADO
+}
+
+enum TipoComissao {
+  PERCENTUAL
+  VALOR_FIXO
+}
+
+enum StatusPagamento {
+  PENDENTE
+  PAGO
+}

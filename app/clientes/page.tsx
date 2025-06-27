@@ -13,6 +13,7 @@ interface Cliente {
   email?: string
   dataNasc?: string
   observacoes?: string
+  ativo: boolean
   createdAt: string
 }
 
