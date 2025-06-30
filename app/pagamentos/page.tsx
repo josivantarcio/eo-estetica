@@ -36,8 +36,17 @@ export default function Pagamentos() {
       fetch('/api/pagamentos').then(r => r.json()),
       fetch('/api/profissionais').then(r => r.json())
     ]).then(([pagamentosData, profissionaisData]) => {
-      setPagamentos(pagamentosData)
-      setProfissionais(profissionaisData)
+      // Garantir que os dados sejam arrays
+      const pagamentosArray = Array.isArray(pagamentosData) ? pagamentosData : []
+      const profissionaisArray = Array.isArray(profissionaisData) ? profissionaisData : []
+      
+      setPagamentos(pagamentosArray)
+      setProfissionais(profissionaisArray)
+      setLoading(false)
+    }).catch(error => {
+      console.error('Erro ao buscar dados:', error)
+      setPagamentos([])
+      setProfissionais([])
       setLoading(false)
     })
   }, [])

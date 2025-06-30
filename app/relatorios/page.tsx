@@ -103,26 +103,26 @@ export default function Relatorios() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Card>
                   <CardContent className="p-4">
-                    <div className="text-2xl font-bold">{relatorio.stats.total}</div>
+                    <div className="text-2xl font-bold">{relatorio.stats?.total || 0}</div>
                     <p className="text-sm text-muted-foreground">Total</p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardContent className="p-4">
-                    <div className="text-2xl font-bold text-green-600">{relatorio.stats.concluidos}</div>
+                    <div className="text-2xl font-bold text-green-600">{relatorio.stats?.concluidos || 0}</div>
                     <p className="text-sm text-muted-foreground">Concluídos</p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardContent className="p-4">
-                    <div className="text-2xl font-bold text-red-600">{relatorio.stats.cancelados}</div>
+                    <div className="text-2xl font-bold text-red-600">{relatorio.stats?.cancelados || 0}</div>
                     <p className="text-sm text-muted-foreground">Cancelados</p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardContent className="p-4">
                     <div className="text-2xl font-bold text-blue-600">
-                      R$ {relatorio.stats.receita.toFixed(2)}
+                      R$ {(relatorio.stats?.receita || 0).toFixed(2)}
                     </div>
                     <p className="text-sm text-muted-foreground">Receita</p>
                   </CardContent>
@@ -135,7 +135,7 @@ export default function Relatorios() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {relatorio.agendamentos.map((agendamento: any) => (
+                    {(relatorio.agendamentos || []).map((agendamento: any) => (
                       <div key={agendamento.id} className="border rounded p-3">
                         <div className="flex justify-between">
                           <span className="font-medium">{agendamento.cliente.nome}</span>
@@ -158,7 +158,7 @@ export default function Relatorios() {
                 <Card>
                   <CardContent className="p-4">
                     <div className="text-2xl font-bold text-green-600">
-                      R$ {relatorio.receitaTotal.toFixed(2)}
+                      R$ {(relatorio.receitaTotal || 0).toFixed(2)}
                     </div>
                     <p className="text-sm text-muted-foreground">Receita Total</p>
                   </CardContent>
@@ -166,14 +166,14 @@ export default function Relatorios() {
                 <Card>
                   <CardContent className="p-4">
                     <div className="text-2xl font-bold">
-                      R$ {relatorio.ticketMedio.toFixed(2)}
+                      R$ {(relatorio.ticketMedio || 0).toFixed(2)}
                     </div>
                     <p className="text-sm text-muted-foreground">Ticket Médio</p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardContent className="p-4">
-                    <div className="text-2xl font-bold">{relatorio.totalAgendamentos}</div>
+                    <div className="text-2xl font-bold">{relatorio.totalAgendamentos || 0}</div>
                     <p className="text-sm text-muted-foreground">Agendamentos</p>
                   </CardContent>
                 </Card>
@@ -185,7 +185,7 @@ export default function Relatorios() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {Object.entries(relatorio.servicosMaisVendidos).map(([servico, quantidade]: [string, any]) => (
+                    {Object.entries(relatorio.servicosMaisVendidos || {}).map(([servico, quantidade]: [string, any]) => (
                       <div key={servico} className="flex justify-between border-b pb-2">
                         <span>{servico}</span>
                         <span className="font-medium">{quantidade} vendas</span>

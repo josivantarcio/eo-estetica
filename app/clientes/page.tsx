@@ -30,10 +30,15 @@ export default function Clientes() {
     try {
       const response = await fetch('/api/clientes')
       const data = await response.json()
-      setClientes(data)
-      setClientesFiltrados(data)
+      
+      // Garantir que data seja um array
+      const clientesArray = Array.isArray(data) ? data : []
+      setClientes(clientesArray)
+      setClientesFiltrados(clientesArray)
     } catch (error) {
       console.error('Erro ao buscar clientes:', error)
+      setClientes([])
+      setClientesFiltrados([])
     } finally {
       setLoading(false)
     }

@@ -31,9 +31,13 @@ export default function Profissionais() {
     try {
       const response = await fetch('/api/profissionais')
       const data = await response.json()
-      setProfissionais(data)
+      
+      // Garantir que data seja um array
+      const profissionaisArray = Array.isArray(data) ? data : []
+      setProfissionais(profissionaisArray)
     } catch (error) {
       console.error('Erro ao buscar profissionais:', error)
+      setProfissionais([])
     } finally {
       setLoading(false)
     }

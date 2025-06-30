@@ -1,0 +1,19 @@
+
+ 
+1 of 1 unhandled error
+Next.js (14.0.4) is outdated (learn more)
+
+Unhandled Runtime Error
+TypeError: Cannot read properties of undefined (reading 'toFixed')
+
+Source
+app\relatorios\page.tsx (161:49) @ toFixed
+
+  159 | <CardContent className="p-4">
+  160 |   <div className="text-2xl font-bold text-green-600">
+> 161 |     R$ {relatorio.receitaTotal.toFixed(2)}
+      |                               ^
+  162 |   </div>
+  163 |   <p className="text-sm text-muted-foreground">Receita Total</p>
+  164 | </CardContent>
+Show collapsed frames

@@ -21,7 +21,10 @@ export default function Aniversarios() {
     const fetchAniversariantes = async () => {
       try {
         const response = await fetch('/api/clientes')
-        const clientes = await response.json()
+        const data = await response.json()
+        
+        // Garantir que data seja um array
+        const clientes = Array.isArray(data) ? data : []
         
         const hoje = new Date()
         const mesAtual = hoje.getMonth()
@@ -43,6 +46,8 @@ export default function Aniversarios() {
         setAniversariantesMes(mes_list)
       } catch (error) {
         console.error('Erro ao buscar aniversariantes:', error)
+        setAniversariantesHoje([])
+        setAniversariantesMes([])
       } finally {
         setLoading(false)
       }

@@ -31,9 +31,13 @@ export default function Agendamentos() {
     try {
       const response = await fetch('/api/agendamentos')
       const data = await response.json()
-      setAgendamentos(data)
+      
+      // Garantir que data seja um array
+      const agendamentosArray = Array.isArray(data) ? data : []
+      setAgendamentos(agendamentosArray)
     } catch (error) {
       console.error('Erro ao buscar agendamentos:', error)
+      setAgendamentos([])
     } finally {
       setLoading(false)
     }

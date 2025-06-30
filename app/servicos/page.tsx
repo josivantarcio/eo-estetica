@@ -34,9 +34,13 @@ export default function Servicos() {
     try {
       const response = await fetch('/api/servicos')
       const data = await response.json()
-      setServicos(data)
+      
+      // Garantir que data seja um array
+      const servicosArray = Array.isArray(data) ? data : []
+      setServicos(servicosArray)
     } catch (error) {
       console.error('Erro ao buscar serviços:', error)
+      setServicos([])
     } finally {
       setLoading(false)
     }
